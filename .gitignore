@@ -1,0 +1,28 @@
+# Ignore the following files
+.DS_Store
+
+# Ignore the generated data
+content/data/
+
+# Ignore the generated models
+content/*.pt
+
+# Build output
+_build/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# JupyterBook / MyST cache
+.myst-cache/
+
+# macOS metadata
+.AppleDouble
+.LSOverride
+
+# VSCode / editor files (if any)
+.vscode/

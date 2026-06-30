@@ -1,0 +1,34 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: 172d0294-a84f-42a7-af7d-65d89515068d
+  title: A minicourse in machine learning
+  description: A collection of tools for introducing ML to Physicists
+  keywords: 
+  - Decision-Tree
+  - Neural-Netowork
+  - Physics and ML
+  authors: Arghya Chattopadhyay
+  # In-page execution: boots a JupyterLite (Pyodide) kernel inside the page.
+  # patch_thebe_lite.py preloads the course packages into that kernel post-build.
+  jupyter:
+    lite: true
+  # github:
+  # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
+  toc:
+  - file: content/00_overview
+  - file: content/01_stat
+  - file: content/02_MLintro
+  - file: content/03_decision
+  - file: content/04_svm
+  - file: content/05_gradient_descent
+  - file: content/06_NN_basic
+  - file: content/07_findingPI
+  - file: content/08_CNN
+  - file: content/09_transformer
+  - file: content/10_further
+  - file: content/11_MLforHEP
+site:
+  template: book-theme
+  options:
+  logo: StringE.png
