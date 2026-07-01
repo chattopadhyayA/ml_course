@@ -105,7 +105,9 @@ before running the notebook again.
 
 - Some figures in this mini course are interactive, especially those using sliders or widgets. To run them you need to press the switch button at the top and play buttong on the corresponding code boxes.
 
+
 ---
+
 #### Acknowledgements
 
 No journey through the lands of Machine Learning is completed alone.
@@ -115,6 +117,8 @@ A very big thank you to [Meghanto](https://github.com/meghanto) for writing the 
 I would also like to warmly thank the mentors of the HSF training programme for their guidance,  and suggestions shaping this mini course. Any bright paths in this material were lit with help from the fellowship; any remaining bugs, typos, or cursed cells are mine to carry.
 
 More acknowledgements will be added soon — this section is still on its way to Mordor.
+
+---
 
 
 ```{note}
