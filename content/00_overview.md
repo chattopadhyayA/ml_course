@@ -103,18 +103,19 @@ align:  center
   `!pip install <missing-package-name>`  
 before running the notebook again.
 
-- Some figures in this mini course are interactive, especially those using sliders or widgets. These may not fully work in the static JupyterBook version, but they should work once you open the corresponding notebook in Google Colab. In a future version, I will try to include a static workaround for these interactive figures.
+- Some figures in this mini course are interactive, especially those using sliders or widgets. To run them you need to press the switch button at the top and play buttong on the corresponding code boxes.
 
 
-## Acknowledgements
+#### Acknowledgements
 
 No journey through the lands of Machine Learning is completed alone.
 
-A very big thank you to [Meghanto](https://github.com/meghanto) for his excellent Pyodide update, which helped make the in-browser notebook experience smoother, kinder, and far less like crossing the Mines of Moria without a torch. Without this update, some of our notebooks might still be lost somewhere between missing packages and mysterious kernel errors.
+A very big thank you to [Meghanto](https://github.com/meghanto) for writing the Thebe-Lite patch and updating the deployment workflow, which helped make the in-browser notebook experience smoother, kinder, and far less like crossing the Mines of Moria without a torch. Without this update, some of our notebooks might still be lost somewhere between missing packages and mysterious kernel errors.
 
-I would also like to warmly thank the mentors of the HSF training programme for their guidance, suggestions, and encouragement in shaping this mini course. Any bright paths in this material were lit with help from the fellowship; any remaining bugs, typos, or cursed cells are mine to carry.
+I would also like to warmly thank the mentors of the HSF training programme for their guidance,  and suggestions shaping this mini course. Any bright paths in this material were lit with help from the fellowship; any remaining bugs, typos, or cursed cells are mine to carry.
 
 More acknowledgements will be added soon — this section is still on its way to Mordor.
+
 
 
 ```{note}
