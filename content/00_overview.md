@@ -106,7 +106,6 @@ before running the notebook again.
 - Some figures in this mini course are interactive, especially those using sliders or widgets. To run them you need to press the switch button at the top and play buttong on the corresponding code boxes.
 
 
----
 
 #### Acknowledgements
 
@@ -118,7 +117,6 @@ I would also like to warmly thank the mentors of the HSF training programme for 
 
 More acknowledgements will be added soon — this section is still on its way to Mordor.
 
----
 
 
 ```{note}
