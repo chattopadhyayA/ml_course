@@ -116,6 +116,7 @@ I would also like to warmly thank the mentors of the HSF training programme for 
 
 More acknowledgements will be added soon — this section is still on its way to Mordor.
 
+
 ```{note}
 With all these, our small fellowship is now ready to proceed.
 
