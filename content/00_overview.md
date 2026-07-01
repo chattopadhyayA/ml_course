@@ -105,7 +105,7 @@ before running the notebook again.
 
 - Some figures in this mini course are interactive, especially those using sliders or widgets. To run them you need to press the switch button at the top and play buttong on the corresponding code boxes.
 
-
+---
 #### Acknowledgements
 
 No journey through the lands of Machine Learning is completed alone.
