@@ -16,8 +16,6 @@ physics connection), and Go further.
 
 Notes for mentors:
 - Every worksheet runs in Google Colab with no setup: no extra installs and no large downloads.
-- The `*_student.ipynb` files are for participants (blanks to fill). The `*_solutions.ipynb` files.
-- Every solutions notebook was executed top to bottom with no errors, and each "Check yourself"
-  target matches the real output.
+- The `*_student.ipynb` files are for participants (blanks to fill). 
 - The deep-learning worksheet uses the small built-in digit images instead of MNIST, so it needs no
   download. The idea is the same as the MNIST lecture.
