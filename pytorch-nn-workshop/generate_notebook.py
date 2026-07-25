@@ -1,0 +1,511 @@
+import json
+import os
+
+def create_notebook():
+    notebook = {
+        "cells": [],
+        "metadata": {
+            "kernelspec": {
+                "display_name": "Python 3",
+                "language": "python",
+                "name": "python3"
+            },
+            "language_info": {
+                "name": "python"
+            }
+        },
+        "nbformat": 4,
+        "nbformat_minor": 2
+    }
+
+    # Add cells
+    
+    # Title & Intro
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "# 🚀 PyTorch Deep Learning Workshop: Jet Classification\n",
+            "\n",
+            "Welcome to the PyTorch Classification Workshop! This hands-on notebook is designed to guide you through the entire PyTorch pipeline in about 30 to 45 minutes.\n",
+            "\n",
+            "Rather than just running finished code, you'll be actively modifying the architecture, tuning hyperparameters, and diagnosing training performance—just like a real-world machine learning engineer.\n",
+            "\n",
+            "### 🎯 The Task: LHC Jet Classification\n",
+            "We will be working with a real-world scientific dataset: **hls4ml Jet High-Level Features (`hls4ml_HLF.arff`)**. \n",
+            "Our goal is to classify subatomic particle jets produced in high-energy collisions at the Large Hadron Collider (LHC) into one of **5 categories**:\n",
+            "- `g`: Gluons (0)\n",
+            "- `q`: Quarks (1)\n",
+            "- `w`: W bosons (2)\n",
+            "- `z`: Z bosons (3)\n",
+            "- `t`: Top quarks (4)\n",
+            "\n",
+            "We have **16 High-Level Features** representing shape, mass, energy distribution, and jet multiplicity.\n",
+            "\n",
+            "---"
+        ]
+    })
+
+    # Cell 1: Imports
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## Imports & Hardware Check\n",
+            "First, let's import the necessary packages and check our hardware acceleration (CUDA for Nvidia GPUs, MPS for Apple Silicon, or CPU)."
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "import torch\n",
+            "import torch.nn as nn\n",
+            "import torch.nn.functional as F\n",
+            "from torch.utils.data import DataLoader, TensorDataset\n",
+            "\n",
+            "import numpy as np\n",
+            "import pandas as pd\n",
+            "from scipy.io import arff\n",
+            "from sklearn.model_selection import train_test_split\n",
+            "from sklearn.preprocessing import StandardScaler\n",
+            "import matplotlib.pyplot as plt\n",
+            "\n",
+            "print(f\"PyTorch version: {torch.__version__}\")\n",
+            "print(f\"CUDA (NVIDIA GPU) available: {torch.cuda.is_available()}\")\n",
+            "print(f\"MPS (Apple Silicon GPU) available: {torch.backends.mps.is_available()}\")\n",
+            "\n",
+            "# Select device\n",
+            "device = torch.device(\"cuda\" if torch.cuda.is_available() else \"mps\" if torch.backends.mps.is_available() else \"cpu\")\n",
+            "print(f\"Using device: {device}\")"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "### 🧪Exercise 1 \n",
+            "1. **What is `nn` vs `F`?** Why does PyTorch separate them? (Hint: Think about stateful object-oriented layers vs stateless mathematical functions).\n",
+            "2. **Why do we use `DataLoader`** instead of just feeding the entire dataset into the model at once? What memory and optimization benefits does it provide?\n",
+            "3. **What is CUDA or MPS?** Why is GPU training so much faster than CPU training for deep learning?"
+        ]
+    })
+
+    # Cell 2: Dataset Loading & Preparation
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## Load and Prepare the Dataset\n",
+            "We load the ARFF file, decode byte labels into strings, map them to numeric values, take a random subset for speed, split them, normalize them, and finally convert them to PyTorch tensors."
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "torch.manual_seed(42)\n",
+            "np.random.seed(42)\n",
+            "\n",
+            "print(\"Loading hls4ml_HLF.arff (this might take ~5-10 seconds)...\")\n",
+            "data, meta = arff.loadarff('hls4ml_HLF.arff')\n",
+            "df = pd.DataFrame(data)\n",
+            "\n",
+            "# Decode bytes to strings for labels\n",
+            "df['class'] = df['class'].str.decode('utf-8')\n",
+            "\n",
+            "# Class mapping\n",
+            "class_names = ['g', 'q', 'w', 'z', 't']\n",
+            "class_mapping = {name: idx for idx, name in enumerate(class_names)}\n",
+            "df['label'] = df['class'].map(class_mapping)\n",
+            "\n",
+            "# Extract features and labels\n",
+            "feature_cols = [col for col in df.columns if col not in ['class', 'label']]\n",
+            "X = df[feature_cols].values\n",
+            "y = df['label'].values\n",
+            "\n",
+            "# --- WORKSHOP SUBSAMPLING ---\n",
+            "# The full dataset has 830,000 samples. Training on all of them on a CPU could take 20+ minutes.\n",
+            "# We will use a fast subset of 20,000 samples for the workshop. \n",
+            "# You can increase this to 100,000+ or the full dataset later to boost your final accuracy!\n",
+            "n_samples = 20000\n",
+            "indices = np.random.choice(len(X), n_samples, replace=False)\n",
+            "X_subset = X[indices]\n",
+            "y_subset = y[indices]\n",
+            "\n",
+            "# Split into Train (80%) and Test (20%)\n",
+            "train_X_raw, test_X_raw, train_y, test_y = train_test_split(\n",
+            "    X_subset, y_subset, test_size=0.2, random_state=42, stratify=y_subset\n",
+            ")\n",
+            "\n",
+            "# --- FEATURE NORMALIZATION ---\n",
+            "# Neural networks perform best when input features are standardized (zero mean, unit variance).\n",
+            "scaler = StandardScaler()\n",
+            "train_X_scaled = scaler.fit_transform(train_X_raw)\n",
+            "test_X_scaled = scaler.transform(test_X_raw)\n",
+            "\n",
+            "# Convert to PyTorch tensors\n",
+            "train_X = torch.tensor(train_X_scaled, dtype=torch.float32)\n",
+            "test_X = torch.tensor(test_X_scaled, dtype=torch.float32)\n",
+            "train_Y = torch.tensor(train_y, dtype=torch.long)\n",
+            "test_Y = torch.tensor(test_y, dtype=torch.long)\n",
+            "\n",
+            "print(\"\\n--- Dataset Summary ---\")\n",
+            "print(f\"Total features: {train_X.shape[1]}\")\n",
+            "print(f\"Training samples: {train_X.shape[0]}\")\n",
+            "print(f\"Test samples: {test_X.shape[0]}\")\n",
+            "print(f\"Class counts in subset:\\n{pd.Series(y_subset).map({v:k for k,v in class_mapping.items()}).value_counts()}\")"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "### 🧪 Exercise 2 — Class Overlap & Normalization:\n",
+            "1. **What happens if classes overlap significantly?** How does that affect the theoretical maximum accuracy our model can achieve?\n",
+            "2. **Why do we normalize features using `StandardScaler`?** What would happen to the weights in the first layer if one feature ranged from `0` to `1` and another ranged from `0` to `1,000,000`? (Hint: Think about gradients and learning rates).\n",
+            "3. **Examine the class distributions.** Are they balanced or unbalanced? How does class imbalance affect evaluation metrics (e.g., standard accuracy vs balanced accuracy)?"
+        ]
+    })
+
+    # Cell 3: Define Model
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## Define the Model Architecture\n",
+            "Here we define our custom neural network class by inheriting from `nn.Module`. \n",
+            "In PyTorch, we define our layers in `__init__` and the network's forward logic in `forward`."
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "class SimpleClassifier(nn.Module):\n",
+            "    def __init__(self, input_dim, hidden_dim, num_classes):\n",
+            "        super().__init__()\n",
+            "        # Layer 1: Linear projection from inputs to hidden features\n",
+            "        self.layer1 = nn.Linear(input_dim, hidden_dim)\n",
+            "        # Non-linear activation\n",
+            "        self.relu = nn.ReLU()\n",
+            "        # Layer 2: Projection from hidden features to class logits\n",
+            "        self.layer2 = nn.Linear(hidden_dim, num_classes)\n",
+            "\n",
+            "    def forward(self, x):\n",
+            "        x = self.relu(self.layer1(x))\n",
+            "        x = self.layer2(x)\n",
+            "        return x\n",
+            "\n",
+            "# Instantiate model\n",
+            "model = SimpleClassifier(\n",
+            "    input_dim=16,       # 16 High-Level Features\n",
+            "    hidden_dim=32,      # Size of the hidden layer representation\n",
+            "    num_classes=5       # 5 jet classes\n",
+            ")\n",
+            "\n",
+            "print(model)\n",
+            "print(f\"Total trainable parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad)}\")"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "### 🛠️ Exercise 3 — Network Architecture & Parameters\n",
+            "1. **Parameter Scaling**: Change `hidden_dim` from `32` to `8`, `64`, `128`, and `256`. Note down how the parameter count changes. Can you compute the formula for the number of parameters in this model? (Hint: don't forget biases!)\n",
+            "2. **Going Deeper (Coding Challenge)**: Modify the `SimpleClassifier` class (or write a new class `DeepClassifier` below) to add a second hidden layer. Your network flow should be:\n",
+            "   * `Linear(input_dim -> hidden_dim)`\n",
+            "   * `ReLU()`\n",
+            "   * `Linear(hidden_dim -> hidden_dim)`\n",
+            "   * `ReLU()`\n",
+            "   * `Linear(hidden_dim -> num_classes)`\n",
+            "3. **Dropout Regularization (Coding Challenge)**: Insert a dropout layer (`nn.Dropout(p=0.3)`) after the activation function(s) to mitigate overfitting. What does dropout do during training, and how does it behave during evaluation (`model.eval()`)?"
+        ]
+    })
+
+    # Cell 4: DataLoader + Optimizer + Loss
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## DataLoader, Optimizer, and Loss\n",
+            "Next, we prepare our `DataLoader` for training, and choose our loss function and optimizer. \n",
+            "These three components dictate how batches are loaded, how errors are quantified, and how weights are adjusted."
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Create DataLoader to feed data in mini-batches during training\n",
+            "train_loader = DataLoader(\n",
+            "    TensorDataset(train_X, train_Y),\n",
+            "    batch_size=32,      # Feed 32 samples at a time\n",
+            "    shuffle=True        # Shuffle every epoch to prevent ordering bias\n",
+            ")\n",
+            "\n",
+            "# Loss function: Multi-class Cross Entropy\n",
+            "criterion = nn.CrossEntropyLoss()\n",
+            "\n",
+            "# Optimizer: Adam optimizer with learning rate 0.01\n",
+            "learning_rate = 0.01\n",
+            "optimizer = torch.optim.Adam(\n",
+            "    model.parameters(),\n",
+            "    lr=learning_rate\n",
+            ")"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "### Exercise 4 — Hyperparameter Impact\n",
+            "1. **Batch Size Sweep**: What happens if you change `batch_size` to `8`, `16`, `64`, or `128`? How does batch size affect training speed (seconds per epoch) and the smoothness of the loss curve?\n",
+            "2. **Optimizer Experimentation**: Replace `Adam` with standard stochastic gradient descent (`torch.optim.SGD(model.parameters(), lr=0.01)`). Does standard SGD learn faster or slower than Adam? Why does Adam converge faster in complex settings?\n",
+            "3. **Learning Rate Search**: Try changing `lr` to:\n",
+            "   * `0.1`: Does the loss explode or oscillate wildly?\n",
+            "   * `0.0001`: Does the model learn too slowly?\n",
+            "4. **L2 Regularization**: Add `weight_decay=1e-4` to the `Adam` optimizer. Try values of `0`, `1e-5`, `1e-3`, and `1e-2`. How does L2 weight decay combat overfitting?"
+        ]
+    })
+
+    # Cell 5: Training Loop
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## The Training Loop\n",
+            "The heart of deep learning in PyTorch is the training loop. We iterate over our epochs and mini-batches, performing forward passes, gradient calculations, and optimizer steps."
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "epochs = 20\n",
+            "\n",
+            "# Move model to the selected hardware device (GPU or CPU)\n",
+            "model = model.to(device)\n",
+            "\n",
+            "train_losses = []\n",
+            "train_accs = []\n",
+            "\n",
+            "for epoch in range(epochs):\n",
+            "    model.train() # Set model to training mode (enables Dropout/BatchNorm)\n",
+            "    \n",
+            "    total_loss = 0.0\n",
+            "    correct = 0\n",
+            "    total = 0\n",
+            "    \n",
+            "    for batch_X, batch_Y in train_loader:\n",
+            "        # Move mini-batch to active device\n",
+            "        batch_X, batch_Y = batch_X.to(device), batch_Y.to(device)\n",
+            "        \n",
+            "        # 1. Zero out previous gradients\n",
+            "        optimizer.zero_grad()\n",
+            "        \n",
+            "        # 2. Forward pass: compute predictions (logits)\n",
+            "        logits = model(batch_X)\n",
+            "        \n",
+            "        # 3. Compute loss\n",
+            "        loss = criterion(logits, batch_Y)\n",
+            "        \n",
+            "        # 4. Backward pass: compute gradients of loss w.r.t parameters\n",
+            "        loss.backward()\n",
+            "        \n",
+            "        # 5. Optimizer step: update weights\n",
+            "        optimizer.step()\n",
+            "        \n",
+            "        # Collect batch statistics\n",
+            "        total_loss += loss.item()\n",
+            "        preds = logits.argmax(dim=1)\n",
+            "        correct += (preds == batch_Y).sum().item()\n",
+            "        total += len(batch_Y)\n",
+            "        \n",
+            "    # Calculate epoch metrics\n",
+            "    epoch_loss = total_loss / len(train_loader)\n",
+            "    epoch_acc = 100.0 * correct / total\n",
+            "    \n",
+            "    train_losses.append(epoch_loss)\n",
+            "    train_accs.append(epoch_acc)\n",
+            "    \n",
+            "    print(f\"Epoch {epoch+1:02d}/{epochs:02d} | Loss: {epoch_loss:.4f} | Train Accuracy: {epoch_acc:.2f}%\")"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "### Exercise 5 — Training Loop Dynamics & Early Stopping\n",
+            "1. **Underfitting vs. Overfitting**: Run the training for `5`, `20`, and `100` epochs. At what point does the training loss stop decreasing significantly? Does the model begin to overfit if trained for too long?\n",
+            "2. **Early Stopping Coding Challenge**: Modify the training loop below (or implement a new version) to incorporate **Early Stopping**. \n",
+            "   * *Instruction:* Evaluate validation loss on the test set at the end of each epoch. Keep track of the best validation loss. If the validation loss does not improve for 5 consecutive epochs, print a message and break the loop early."
+        ]
+    })
+
+    # Cell 6: Evaluation
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## Evaluate the Model\n",
+            "We must test our model on unseen data. During evaluation, we put the model in `.eval()` mode and wrap our code in `with torch.no_grad():` to turn off gradient computation (saving memory and compute)."
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "model.eval() # Set model to evaluation mode (disables Dropout/BatchNorm)\n",
+            "\n",
+            "# Move test dataset to the active device\n",
+            "test_X = test_X.to(device)\n",
+            "test_Y = test_Y.to(device)\n",
+            "\n",
+            "# Disable gradient computations\n",
+            "with torch.no_grad():\n",
+            "    logits = model(test_X)\n",
+            "    preds = logits.argmax(dim=1)\n",
+            "    acc = (preds == test_Y).float().mean()\n",
+            "\n",
+            "print(f\"Test Accuracy: {acc.item() * 100:.2f}%\")"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "### Error Analysis & Confusion Matrix\n",
+            "1. **Inspect Predictions (Coding challenge)**: Write a quick snippet to print the first 10 predictions alongside their true labels. Identify which predictions are correct and which are wrong.\n",
+            "2. **Locate Misclassifications (Coding challenge)**: Print the index and feature values of 3 samples that the model predicted incorrectly. What might have confused the model?\n",
+            "3. **Confusion Matrix (Coding challenge)**: Use `sklearn.metrics.confusion_matrix` and `matplotlib.pyplot` to compute and plot a Confusion Matrix. \n",
+            "   * *Questions:* Which particle classes are most frequently confused with each other? (e.g., quark `q` vs gluon `g`, or W boson `w` vs Z boson `z`?) Why does this make physical sense?"
+        ]
+    })
+
+    # Cell 7: Softmax & Probabilities
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## Logits vs Softmax Probabilities\n",
+            "Our model outputs raw values called **logits**. To convert them into interpretable probabilities that sum to 1, we apply the Softmax activation."
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Apply Softmax along the class dimension (dim=1)\n",
+            "probabilities = torch.softmax(logits, dim=1)\n",
+            "\n",
+            "# Display the first 5 test samples\n",
+            "for i in range(5):\n",
+            "    print(f\"Sample {i+1}:\")\n",
+            "    print(f\"  Logits:        {logits[i].cpu().numpy()}\")\n",
+            "    print(f\"  Probabilities: {probabilities[i].cpu().numpy()} (Sum: {probabilities[i].sum().item():.2f})\")\n",
+            "    print(f\"  Prediction:    {class_names[preds[i].item()]} (Class {preds[i].item()})\")\n",
+            "    print(f\"  True Label:    {class_names[test_Y[i].item()]} (Class {test_Y[i].item()})\\n\")"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "### 🤯 Exercise 7 — The Softmax Mystery\n",
+            "1. **CrossEntropyLoss Detail**: Look back at Cell 4 where we defined our loss function as `nn.CrossEntropyLoss()`. Notice that our model's last layer in Cell 3 is a `nn.Linear` layer that directly outputs raw logits (not probabilities).\n",
+            "2. **Why does `nn.CrossEntropyLoss` NOT want us to add a Softmax layer at the end of our model?** \n",
+            "   * *Hint:* Read the PyTorch documentation. What two operations are combined inside `nn.CrossEntropyLoss`? (Answer: LogSoftmax and Negative Log Likelihood Loss - NLLLoss).\n",
+            "3. **What is the numerical stability benefit** of combining Softmax and Log operations together instead of computing them separately? (Hint: Think about floating-point exponentiation overflow and underflow)."
+        ]
+    })
+
+    # Cell 8: Save & Load Model
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## Save and Load the Model\n",
+            "Once you have trained your model, you'll want to save its weights so you can deploy it later. In PyTorch, we save the `state_dict()` which contains the model's weight and bias matrices."
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Save the trained weights to a file\n",
+            "torch.save(model.state_dict(), \"classifier.pt\")\n",
+            "print(\"Model weights saved to classifier.pt!\")\n",
+            "\n",
+            "# To load, we must first instantiate the architecture\n",
+            "loaded_model = SimpleClassifier(input_dim=16, hidden_dim=32, num_classes=5)\n",
+            "\n",
+            "# Load the weights into the architecture\n",
+            "loaded_model.load_state_dict(torch.load(\"classifier.pt\"))\n",
+            "loaded_model = loaded_model.to(device)\n",
+            "loaded_model.eval()\n",
+            "\n",
+            "# Double check validation accuracy matches exactly\n",
+            "with torch.no_grad():\n",
+            "    loaded_logits = loaded_model(test_X)\n",
+            "    loaded_preds = loaded_logits.argmax(dim=1)\n",
+            "    loaded_acc = (loaded_preds == test_Y).float().mean()\n",
+            "\n",
+            "print(f\"Loaded Model Test Accuracy: {loaded_acc.item() * 100:.2f}%\")"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "### 🏆 Exercise 8 — The Ultimate LHC Jet Classification Challenge!\n",
+            "Now it's time to put everything you've learned to the test! \n",
+            "Your objective is to modify the code across the cells (or write custom code in the cell below) to achieve the **highest possible test accuracy** on the jet classification dataset.\n",
+            "\n",
+            "#### 🛠️ Hyperparameter Tuning Strategies to Explore:\n",
+            "1. **Scale up the Data**: Increase `n_samples` from `20000` to `50000`, `150000`, or use the entire `830,000` dataset (in Cell 2).\n",
+            "2. **Wider/Deeper Model**: Modify the architecture (in Cell 3) to add more layers and hidden units. (e.g. layers of size `128` and `64`).\n",
+            "3. **Combat Overfitting**: Introduce `nn.Dropout(p=0.2)` or `nn.Dropout(p=0.4)` and L2 regularization (`weight_decay=1e-4` in the optimizer in Cell 4).\n",
+            "4. **Learning Rate Scheduling**: Keep your learning rate high initially, and decay it as training progresses.\n",
+            "5. **Batch Size Tuning**: Try different batch sizes (`16`, `32`, `64`, `128`, `256`).\n",
+            "6. **Optimizer Experimentation**: Try `Adam`, `AdamW`, `RMSprop`, or `SGD` with momentum.\n",
+            "\n",
+            "Use the scratch cell below to design, train, and validate your optimized model. Can you surpass **80% accuracy**? Share your architecture, training strategy, and best test accuracy with the class!"
+        ]
+    })
+    notebook["cells"].append({
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Write and run your custom challenge code here!\n",
+            "# Hint: Define a new model, configure a custom DataLoader & optimizer, train and evaluate.\n",
+            "\n"
+        ]
+    })
+
+    # Save to file
+    with open('pytorch_classification_workshop.ipynb', 'w') as f:
+        json.dump(notebook, f, indent=2)
+    print("Successfully generated pytorch_classification_workshop.ipynb!")
+
+if __name__ == '__main__':
+    create_notebook()
