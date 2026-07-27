@@ -1,2 +1,38 @@
+# ============================================================
+# Machine Learning course: Python dependencies
+# ============================================================
+
+# Numerical computing and statistics
+numpy
+scipy
+
+# Data handling
+pandas
+
+# Plotting and visualisation
+matplotlib
+seaborn
+plotly
+
+# Classical machine learning
+scikit-learn
+
+# Jupyter / interactive notebooks
+jupyterlab
+ipykernel
+ipywidgets
+
+# Deep learning
+torch
+torchvision
+torchinfo
+
+# ============================================================
+# Jupyter Book / MyST
+# These are mainly needed if you also want to build the course
+# website locally. They are not required just to run the
+# notebooks and exercises, but keeping them here gives a
+# complete local setup.
+# ============================================================
 mystmd
 jupyter-book>=2

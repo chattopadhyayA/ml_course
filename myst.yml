@@ -28,6 +28,7 @@ project:
   - file: content/09_transformer
   - file: content/10_further
   - file: content/11_MLforHEP
+  - file: content/12_exercises
 site:
   template: book-theme
   options:
