@@ -223,11 +223,18 @@ From this point onward, if you are using WSL, you can simply follow the **macOS/
 ```{tip}
 If you use WSL, I recommend keeping the course repository inside your Linux home directory rather than mixing the Python environment with random Windows folders.
 
-For example, open Ubuntu and start from
+For example, open Ubuntu/WSL and first go to your Linux home directory:
 
 ```bash
 cd ~
 ```
+
+Here `~` means your Linux home directory, something like
+
+```bash
+/home/your_username/
+```
+After that you are ready to follow the rest of the instructions below.
 
 ---
 
