@@ -127,9 +127,11 @@ before running the notebook again.
 ```{important}
 You **do not need to install anything locally** to follow this mini course. The lecture notebooks and exercises can be opened and run directly in **Google Colab**.
 
+To run and save notebooks interactively in Google Colab, you will need to be signed in with a **Google account** (for most people, this will simply be their Gmail account).
+
 However, especially for the exercises, I strongly encourage you to also set up the course on your own computer. Installing the software, creating an environment, opening Jupyter, running the notebooks, and occasionally fixing something that breaks are all part of getting real **hands-on experience** with scientific computing.
 
-Colab is the easy road. Setting things up locally teaches you how the road was built.
+**Colab is the easy road. Setting things up locally teaches you how the road was built.**
 ```
 
 ### Why do we need a Python environment?
@@ -157,17 +159,106 @@ You only need to follow **one** of these two routes.
 
 ---
 
-### Step 0: Get the course files
+## A note for Windows users
 
-First open a terminal.
+If you are using **Windows**, you have two possible ways of following the instructions below:
 
-Clone the course repository:
+1. Use Windows directly through **PowerShell** or **Command Prompt**. Windows-specific commands are given below whenever they are different.
+2. Use the **Windows Subsystem for Linux (WSL)**, which gives you a Linux terminal inside Windows.
+
+For scientific computing, WSL can be very convenient because most commands then look almost exactly like the Linux commands you will encounter on servers, computing clusters, and many research machines.
+
+```{note}
+A small disclaimer from your instructor: I have considerably less experience fighting with Windows than with Linux/macOS, so the Windows instructions may contain a few more hidden Orcs than the rest of this course.
+
+If something behaves mysteriously, WSL is often a good escape route. And if all else fails, Google Colab remains our emergency eagle out of Mordor.
+```
+
+### Installing WSL
+
+If you already have WSL installed, you can skip this part.
+
+Otherwise, open **PowerShell as Administrator**:
+
+- Search for `PowerShell` from the Windows Start menu.
+- Right-click it.
+- Choose **Run as administrator**.
+
+Then run
+
+```text
+wsl --install
+```
+
+Restart your computer when Windows asks you to.
+
+By default, WSL will install an **Ubuntu Linux** environment.
+
+After restarting, open **Ubuntu** from the Start menu. The first time it starts, you will be asked to create a Linux username and password.
+
+You can check that WSL is installed by running the following from PowerShell:
+
+```text
+wsl --list --verbose
+```
+
+For more information, see the official Microsoft instructions:
+
+[Installing WSL on Windows](https://learn.microsoft.com/en-us/windows/wsl/install)
+
+Once you are inside the Ubuntu/WSL terminal, update the Linux package information:
+
+```bash
+sudo apt update
+```
+
+and install some basic tools that we will need:
+
+```bash
+sudo apt install python3 python3-pip python3-venv git -y
+```
+
+From this point onward, if you are using WSL, you can simply follow the **macOS/Linux/WSL** commands given below.
+
+```{tip}
+If you use WSL, I recommend keeping the course repository inside your Linux home directory rather than mixing the Python environment with random Windows folders.
+
+For example, open Ubuntu and start from
+
+```bash
+cd ~
+```
+
+before cloning the repository.
+```
+
+---
+
+## First: Get the course files
+
+This part is **common to both installation methods**. You only need to clone the course repository once.
+
+Open a terminal:
+
+- On **macOS/Linux**, use your normal terminal.
+- On **Windows**, use PowerShell or Command Prompt.
+- If you installed **WSL**, open your Ubuntu terminal.
+
+First make sure that Git is available:
+
+```bash
+git --version
+```
+
+If Git is installed, this should print a version number.
+
+Now clone the course repository:
 
 ```bash
 git clone https://github.com/chattopadhyayA/ml_course.git
 ```
 
-and move inside it:
+Then move inside the repository:
 
 ```bash
 cd ml_course
@@ -183,7 +274,13 @@ content_nb/
 exercises/
 ```
 
-The lecture notebooks shown during the class are inside `content/`, class exercises are in `content_nb/` while the exercise notebooks are inside `exercises/`.
+The lecture notebooks shown during the class are inside `content/`, class exercises are in `content_nb/`, while the exercise notebooks are inside `exercises/`.
+
+```{important}
+From this point onward, all installation commands should be run **from inside the `ml_course` directory**, unless explicitly stated otherwise.
+```
+
+Now choose **one** of the two environment setups below.
 
 ---
 
@@ -212,6 +309,8 @@ conda create -n rivendell python=3.11 -y
 ```
 
 This creates a separate Python installation specifically for this course.
+
+Every journey needs a safe place from which to begin, and ours begins in **Rivendell**.
 
 ### 2. Activate the environment
 
@@ -267,7 +366,7 @@ Now Jupyter knows that it can use the Python installation and packages inside ou
 
 ### 5. Start JupyterLab
 
-Make sure that you are still inside the activated `rivendell` environment, and run
+Make sure that you are still inside the activated `rivendell` environment and inside the `ml_course` directory, then run
 
 ```bash
 jupyter lab
@@ -295,7 +394,9 @@ You can leave the environment with
 conda deactivate
 ```
 
-The next time you work on the course, you do **not** need to install everything again. Simply use
+The next time you work on the course, you do **not** need to install everything again.
+
+Simply go back to the repository, activate Rivendell, and start JupyterLab:
 
 ```bash
 cd ml_course
@@ -313,15 +414,23 @@ Python itself contains a lightweight environment system called `venv`.
 
 Unlike Conda, `venv` does not install a separate Python version for you. It starts from a Python installation that is already present on your computer and creates an isolated place for the packages used by this project.
 
-First check that Python is installed:
+### Check that Python is installed
+
+On **macOS, Linux, or WSL**, run:
 
 ```bash
 python3 --version
 ```
 
-On some systems, particularly Windows, the command may instead be
+On **Windows**, try:
 
-```bash
+```text
+py --version
+```
+
+or, depending on your Python installation,
+
+```text
 python --version
 ```
 
@@ -329,13 +438,15 @@ For this course, Python **3.11** is a safe choice.
 
 ### 1. Create the environment
 
-From inside the `ml_course` directory, on macOS or Linux run
+Make sure that you are inside the cloned `ml_course` directory.
+
+On **macOS, Linux, or WSL**, run
 
 ```bash
 python3 -m venv rivendell
 ```
 
-On Windows you can use
+On **Windows PowerShell or Command Prompt**, run
 
 ```text
 py -m venv rivendell
@@ -343,9 +454,11 @@ py -m venv rivendell
 
 This creates a directory called `rivendell` containing the isolated environment.
 
+Notice that both the Conda and `venv` approaches use the same environment name. Regardless of which road you choose, we all eventually arrive at **Rivendell**.
+
 ### 2. Activate it
 
-On **macOS or Linux**:
+On **macOS, Linux, or WSL**:
 
 ```bash
 source rivendell/bin/activate
@@ -363,23 +476,25 @@ On **Windows Command Prompt**:
 rivendell\Scripts\activate.bat
 ```
 
+If PowerShell refuses to run the activation script because of its script-execution settings, you can either use **Command Prompt** instead or use **WSL** and follow the Linux instructions.
+
 After activation, you should normally see something like
 
 ```text
 (rivendell) $
 ```
 
-at the beginning of your terminal.
+at the beginning of your terminal prompt.
 
 ### 3. Install the course packages
 
-Update `pip`:
+First update `pip`:
 
 ```bash
 python -m pip install --upgrade pip
 ```
 
-and then install the packages required by the course:
+Then install the packages required by the course:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -405,16 +520,23 @@ You should see an entry called `rivendell`.
 
 Now Jupyter knows that it can use the Python installation and packages inside our `rivendell` environment.
 
-
 ### 5. Start JupyterLab
 
-Make sure that you are still inside the activated `rivendell` environment, and run
+Make sure that you are still inside the activated `rivendell` environment and inside the `ml_course` directory, then run
 
 ```bash
 jupyter lab
 ```
 
 A browser window should open with the JupyterLab interface.
+
+If you are using **WSL** and a browser does not open automatically, look at the terminal output. Jupyter will print an address similar to
+
+```text
+http://localhost:8888/lab?token=...
+```
+
+Copy that address and open it in your normal Windows web browser.
 
 Open the notebook you want to work with. If Jupyter asks you to select a kernel, choose
 
@@ -436,11 +558,37 @@ When you are finished:
 deactivate
 ```
 
-The environment stays on your computer. Next time, go back to the repository and activate `rivendell` again before starting Jupyter.
+The environment stays on your computer. You do **not** need to recreate or reinstall it every time.
+
+The next time you want to work on the course:
+
+On **macOS, Linux, or WSL**:
+
+```bash
+cd ml_course
+source rivendell/bin/activate
+jupyter lab
+```
+
+On **Windows PowerShell**:
+
+```text
+cd ml_course
+rivendell\Scripts\Activate.ps1
+jupyter lab
+```
+
+On **Windows Command Prompt**:
+
+```text
+cd ml_course
+rivendell\Scripts\activate.bat
+jupyter lab
+```
 
 ---
 
-### Check that everything works
+## Check that everything works
 
 After installing the packages, you can do a quick test from the terminal:
 
@@ -456,13 +604,19 @@ Everything looks good!
 
 your basic setup is ready.
 
+You can also verify that Jupyter can see Rivendell:
+
+```bash
+jupyter kernelspec list
+```
+
+and make sure that `rivendell` appears in the output.
+
 ```{tip}
 Do not worry if setting up a local environment feels slightly confusing the first time. Learning how to create an environment, install packages, and find out why Python cannot find a package is itself an important scientific-computing skill.
 
 And remember: if the Balrog of dependency conflicts appears, Google Colab is still there as the Bridge of Khazad-dûm.
 ```
-
-
 
 #### Acknowledgements
 
