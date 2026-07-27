@@ -10,7 +10,7 @@
 </div>
 ```
 
-This course page can also be thought of as my notes on basics of Machine Learning (ML). These particular notes are built upon the **A mini course in Machine Learning for Physicists** notes available here:  [A mini course in Machine Learning for Physicists](https://chattopadhyaya.github.io/ml_for_physics). Given our modern day use of all things electronic, *you can run, you can hide but you cannot escape ML*. From smart phones to smart toothpastes, ML is everywhere. The aim of these development is to help physicists to wrap their head around all things ML.
+These particular notes are built upon the **A mini course in Machine Learning for Physicists** notes available here:  [A mini course in Machine Learning for Physicists](https://chattopadhyaya.github.io/ml_for_physics). Given our modern day use of all things electronic, *you can run, you can hide but you cannot escape ML*. From smart phones to smart toothpastes, ML is everywhere. The aim of these development is to help physicists to wrap their head around all things ML.
 
 
 In this course, "*we're here for a good time, not a long time*" so let's first learn what this course in **NOT** for
@@ -93,17 +93,375 @@ align:  center
 ```
 
 ---
-#### Rules for this mini course
+## Rules for this mini course
 
 - Each of the following chapter will have a [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://youtu.be/5LB_y-nudGU?si=MYDYvubUH8qLpm89) button. Clikcing on the button will open up the Jupyter Notebook in Google Collab, where you can modify and run the files as you wish. Remember that the only way to learn is to start first.
 
 - There are questions in the jupyter lab notebooks, where the answers are hidden. But a single click would unveil the answers. The mini course will work on an *honour-system*, you are not allowed to open the answers before you are told to do so. 
+
+- Some pages in this mini course allow you to **run Python directly inside the webpage**. When such a page first loads, look for the following button near the top of the page:
+
+  <img src="images/pyodide_power_button.png" alt="Turn on interactive Python" style="height:52px; vertical-align:middle;">
+
+  Click this button first to turn on the interactive Python environment. The first startup may take a few moments while the browser prepares the kernel and loads the required packages.
+
+- Once the interactive environment is ready, runnable code cells will show controls like these:
+
+  <img src="images/pyodide_cell_controls.png" alt="Run and collapse code cell controls" style="height:38px; vertical-align:middle;">
+
+  The **play button** runs that particular code cell directly in your browser. The button next to it can be used to collapse or hide the code area.
+
+- For interactive figures, sliders, and widgets, first turn on the interactive environment using the power button, and then press the play button on the corresponding code cell. Some cells may depend on earlier cells, so it is usually best to run them in order.
 
 - If some of the code cells do not run in Google Colab, check the warning or error message for missing packages and install them in a new cell using  
   `!pip install <missing-package-name>`  
 before running the notebook again.
 
 - Some figures in this mini course are interactive, especially those using sliders or widgets. To run them you need to press the switch button at the top and play buttong on the corresponding code boxes.
+
+
+
+---
+
+## Running the course on your own computer
+
+```{important}
+You **do not need to install anything locally** to follow this mini course. The lecture notebooks and exercises can be opened and run directly in **Google Colab**.
+
+However, especially for the exercises, I strongly encourage you to also set up the course on your own computer. Installing the software, creating an environment, opening Jupyter, running the notebooks, and occasionally fixing something that breaks are all part of getting real **hands-on experience** with scientific computing.
+
+Colab is the easy road. Setting things up locally teaches you how the road was built.
+```
+
+### Why do we need a Python environment?
+
+A Python project usually depends on several external packages: `numpy`, `pandas`, `scikit-learn`, `torch`, and so on. Different projects may require different packages or even different versions of Python.
+
+A **Python environment** gives one project its own isolated collection of Python and its packages. This prevents the packages used for this course from interfering with packages used by your other projects or your OS itself.
+
+For example, you could have
+
+```text
+Environment A → ML course → Python + NumPy + PyTorch + scikit-learn
+
+Environment B → another research project → Python + completely different packages
+```
+
+without the two projects fighting with each other.
+
+There are several ways of creating environments. Below I give two options:
+
+1. **Using Conda** — recommended if you already have Conda or are happy to install it.
+2. **Using Python's built-in `venv`** — a lighter option that does not require Conda.
+
+You only need to follow **one** of these two routes.
+
+---
+
+### Step 0: Get the course files
+
+First open a terminal.
+
+Clone the course repository:
+
+```bash
+git clone https://github.com/chattopadhyayA/ml_course.git
+```
+
+and move inside it:
+
+```bash
+cd ml_course
+```
+
+You should now be inside a directory containing files and folders such as
+
+```text
+myst.yml
+requirements.txt
+content/
+content_nb/
+exercises/
+```
+
+The lecture notebooks shown during the class are inside `content/`, class exercises are in `content_nb/` while the exercise notebooks are inside `exercises/`.
+
+---
+
+## Option A: Setting things up with Conda
+
+Conda is both an **environment manager** and a **package manager**. One useful feature is that we can ask Conda to create an environment with a particular Python version instead of relying on whichever Python happens to be installed on the computer.
+
+If you do not already have Conda, install either **Miniforge** or **Miniconda** first. For Miniconda, you can follow the official installation guide here:
+
+[Miniconda installation guide](https://www.anaconda.com/docs/getting-started/miniconda/install)
+
+After installation, open a new terminal and check that Conda is available:
+
+```bash
+conda --version
+```
+
+If this prints a version number, we are ready.
+
+### 1. Create a new environment
+
+For this course, let us call the environment `rivendell`:
+
+```bash
+conda create -n rivendell python=3.11 -y
+```
+
+This creates a separate Python installation specifically for this course.
+
+### 2. Activate the environment
+
+```bash
+conda activate rivendell
+```
+
+You should now see something similar to
+
+```text
+(rivendell) $
+```
+
+at the beginning of your terminal prompt.
+
+That `(rivendell)` is important: it tells you that commands such as `python` and `pip` are now using the course environment.
+
+### 3. Install the packages used in the course
+
+First update `pip`:
+
+```bash
+python -m pip install --upgrade pip
+```
+
+Then install everything listed in the `requirements.txt` file:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+The installation of PyTorch and related packages may take a little while.
+
+### 4. Make the environment visible to Jupyter
+
+JupyterLab and the Python environment that runs your code are actually two separate things. To make our `rivendell` environment appear explicitly as a choice inside JupyterLab, we register it as a **Jupyter kernel**.
+
+Run:
+
+```bash
+python -m ipykernel install --user --name rivendell --display-name "Python (Rivendell)"
+```
+
+You can check that the kernel was registered successfully with
+
+```bash
+jupyter kernelspec list
+```
+
+You should see an entry called `rivendell`.
+
+Now Jupyter knows that it can use the Python installation and packages inside our `rivendell` environment.
+
+### 5. Start JupyterLab
+
+Make sure that you are still inside the activated `rivendell` environment, and run
+
+```bash
+jupyter lab
+```
+
+A browser window should open with the JupyterLab interface.
+
+Open the notebook you want to work with. If Jupyter asks you to select a kernel, choose
+
+```text
+Python (Rivendell)
+```
+
+You can also change the kernel later from the **Kernel** menu in JupyterLab.
+
+```{important}
+Before running the notebook, check that the selected kernel is **Python (Rivendell)**. Otherwise Jupyter may use a different Python installation that does not contain the packages you just installed.
+```
+
+### 6. When you are finished
+
+You can leave the environment with
+
+```bash
+conda deactivate
+```
+
+The next time you work on the course, you do **not** need to install everything again. Simply use
+
+```bash
+cd ml_course
+conda activate rivendell
+jupyter lab
+```
+
+and you are back where you left off.
+
+---
+
+## Option B: Setting things up without Conda
+
+Python itself contains a lightweight environment system called `venv`.
+
+Unlike Conda, `venv` does not install a separate Python version for you. It starts from a Python installation that is already present on your computer and creates an isolated place for the packages used by this project.
+
+First check that Python is installed:
+
+```bash
+python3 --version
+```
+
+On some systems, particularly Windows, the command may instead be
+
+```bash
+python --version
+```
+
+For this course, Python **3.11** is a safe choice.
+
+### 1. Create the environment
+
+From inside the `ml_course` directory, on macOS or Linux run
+
+```bash
+python3 -m venv rivendell
+```
+
+On Windows you can use
+
+```text
+py -m venv rivendell
+```
+
+This creates a directory called `rivendell` containing the isolated environment.
+
+### 2. Activate it
+
+On **macOS or Linux**:
+
+```bash
+source rivendell/bin/activate
+```
+
+On **Windows PowerShell**:
+
+```text
+rivendell\Scripts\Activate.ps1
+```
+
+On **Windows Command Prompt**:
+
+```text
+rivendell\Scripts\activate.bat
+```
+
+After activation, you should normally see something like
+
+```text
+(rivendell) $
+```
+
+at the beginning of your terminal.
+
+### 3. Install the course packages
+
+Update `pip`:
+
+```bash
+python -m pip install --upgrade pip
+```
+
+and then install the packages required by the course:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 4. Make the environment visible to Jupyter
+
+JupyterLab and the Python environment that runs your code are actually two separate things. To make our `rivendell` environment appear explicitly as a choice inside JupyterLab, we register it as a **Jupyter kernel**.
+
+Run:
+
+```bash
+python -m ipykernel install --user --name rivendell --display-name "Python (Rivendell)"
+```
+
+You can check that the kernel was registered successfully with
+
+```bash
+jupyter kernelspec list
+```
+
+You should see an entry called `rivendell`.
+
+Now Jupyter knows that it can use the Python installation and packages inside our `rivendell` environment.
+
+
+### 5. Start JupyterLab
+
+Make sure that you are still inside the activated `rivendell` environment, and run
+
+```bash
+jupyter lab
+```
+
+A browser window should open with the JupyterLab interface.
+
+Open the notebook you want to work with. If Jupyter asks you to select a kernel, choose
+
+```text
+Python (Rivendell)
+```
+
+You can also change the kernel later from the **Kernel** menu in JupyterLab.
+
+```{important}
+Before running the notebook, check that the selected kernel is **Python (Rivendell)**. Otherwise Jupyter may use a different Python installation that does not contain the packages you just installed.
+```
+
+### 6. Leaving the environment
+
+When you are finished:
+
+```bash
+deactivate
+```
+
+The environment stays on your computer. Next time, go back to the repository and activate `rivendell` again before starting Jupyter.
+
+---
+
+### Check that everything works
+
+After installing the packages, you can do a quick test from the terminal:
+
+```bash
+python -c "import numpy, pandas, scipy, sklearn, matplotlib, seaborn, torch; print('Everything looks good!')"
+```
+
+If you see
+
+```text
+Everything looks good!
+```
+
+your basic setup is ready.
+
+```{tip}
+Do not worry if setting up a local environment feels slightly confusing the first time. Learning how to create an environment, install packages, and find out why Python cannot find a package is itself an important scientific-computing skill.
+
+And remember: if the Balrog of dependency conflicts appears, Google Colab is still there as the Bridge of Khazad-dûm.
+```
 
 
 
