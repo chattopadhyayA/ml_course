@@ -471,7 +471,7 @@ No journey through the lands of Machine Learning is completed alone.
 
 A very big thank you to [Meghanto](https://github.com/meghanto) for writing the Thebe-Lite patch and updating the deployment workflow, which helped make the in-browser notebook experience smoother, kinder, and far less like crossing the Mines of Moria without a torch. Without this update, some of our notebooks might still be lost somewhere between missing packages and mysterious kernel errors.
 
-I would also like to warmly thank the mentors of the HSF training programme for their guidance,  and suggestions shaping this mini course. Any bright paths in this material were lit with help from the fellowship; any remaining bugs, typos, or cursed cells are mine to carry.
+I would also like to warmly thank the mentors of the HSF training programme for their guidance and suggestions shaping this mini course: specially [Aashirvad](https://github.com/aashirvad08) and [Karan](https://github.com/KaranSinghDev). Any bright paths in this material were lit with help from the fellowship; any remaining bugs, typos, or cursed cells are mine to carry.
 
 More acknowledgements will be added soon — this section is still on its way to Mordor.
 
