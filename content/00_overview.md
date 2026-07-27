@@ -113,12 +113,11 @@ align:  center
 
 - For interactive figures, sliders, and widgets, first turn on the interactive environment using the power button, and then press the play button on the corresponding code cell. Some cells may depend on earlier cells, so it is usually best to run them in order.
 
+- Unfortunately, the in-browser `Pyodide` setup described above is not suitable for actually **training the machine-learning models** used later in this mini course. Therefore, whenever you reach pages involving ML applications and model training, please run the corresponding notebook either in **Google Colab** or on your **local machine**.
+
 - If some of the code cells do not run in Google Colab, check the warning or error message for missing packages and install them in a new cell using  
   `!pip install <missing-package-name>`  
 before running the notebook again.
-
-- Some figures in this mini course are interactive, especially those using sliders or widgets. To run them you need to press the switch button at the top and play buttong on the corresponding code boxes.
-
 
 
 ---
