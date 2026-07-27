@@ -229,12 +229,9 @@ For example, open Ubuntu and start from
 cd ~
 ```
 
-before cloning the repository.
-```
-
 ---
 
-## First: Get the course files
+## Getting the course files
 
 This part is **common to both installation methods**. You only need to clone the course repository once.
 
