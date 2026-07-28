@@ -1,4 +1,4 @@
-# A mini course in Machine Learning for HSF training
+#  HSF/IRIS-HEP Machine Learning Training: A mini course
 ## Overview
 
 ```{figure} ../StringE.png
