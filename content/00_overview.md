@@ -186,7 +186,7 @@ Restart your computer when Windows asks you to.
 
 By default, WSL will install an **Ubuntu Linux** environment.
 
-After restarting, open **Ubuntu** from the Start menu. The first time it starts, you will be asked to create a Linux username and password.
+After restarting, open **Ubuntu** from the Start menu. The first time it starts, you will be asked to create a Linux username and password. Make sure to remember this password, as you will need it whenever you run administrator (`sudo`) commands.
 
 You can check that WSL is installed by running the following from PowerShell:
 
@@ -313,6 +313,7 @@ Every journey needs a safe place from which to begin, and ours begins in **Riven
 ```bash
 conda activate rivendell
 ```
+ **For Windows Users:** The `conda activate` command will often fail in standard Windows PowerShell. Instead of using normal PowerShell, please search for and open the **"Anaconda Prompt"** or **"Miniforge Prompt"** from your Windows Start menu to run the following Conda commands.
 
 You should now see something similar to
 
