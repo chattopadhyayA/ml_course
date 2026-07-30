@@ -95,7 +95,7 @@ align:  center
 ---
 ## Rules for this mini course
 
-- Each of the following chapter will have a [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://youtu.be/5LB_y-nudGU?si=MYDYvubUH8qLpm89) button. Clikcing on the button will open up the Jupyter Notebook in Google Collab, where you can modify and run the files as you wish. Remember that the only way to learn is to start first.
+- Each of the following chapter will have a [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://youtu.be/NPBCbTZWnq0?si=gqvhQB1CMYyacW7z) button. Clikcing on the button will open up the Jupyter Notebook in Google Collab, where you can modify and run the files as you wish. Remember that the only way to learn is to start first.
 
 - There are questions in the jupyter lab notebooks, where the answers are hidden. But a single click would unveil the answers. The mini course will work on an *honour-system*, you are not allowed to open the answers before you are told to do so. 
 
