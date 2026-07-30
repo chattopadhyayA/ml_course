@@ -217,6 +217,7 @@ If you use WSL, I recommend keeping the course repository inside your Linux home
 
 For example, open Ubuntu/WSL and first go to your Linux home directory:
 
+```
 ```bash
 cd ~
 ```
