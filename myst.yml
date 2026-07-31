@@ -2,7 +2,7 @@
 version: 1
 project:
   id: 172d0294-a84f-42a7-af7d-65d89515068d
-  title: A minicourse in machine learning
+  title: A minicourse in machine learning for physicists
   description: A collection of tools for introducing ML to Physicists
   keywords: 
   - Decision-Tree
