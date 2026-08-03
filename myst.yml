@@ -24,11 +24,12 @@ project:
   - file: content/05_gradient_descent
   - file: content/06_NN_basic
   - file: content/07_findingPI
-  - file: content/08_CNN
-  - file: content/09_transformer
-  - file: content/10_further
-  - file: content/11_MLforHEP
-  - file: content/12_exercises
+  - file: content/08_NN_musings
+  - file: content/09_CNN
+  - file: content/10_transformer
+  - file: content/11_further
+  - file: content/12_MLforHEP
+  - file: content/13_exercises
 site:
   template: book-theme
   options:
