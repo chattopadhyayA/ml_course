@@ -1,4 +1,4 @@
-#  HSF/IRIS-HEP Machine Learning Training: A mini course
+#  Machine Learning primer: A mini course
 ## Overview
 
 ```{figure} ../StringE.png
@@ -10,7 +10,10 @@
 </div>
 ```
 
-These particular notes are built upon the **A mini course in Machine Learning for Physicists** notes available here:  [A mini course in Machine Learning for Physicists](https://chattopadhyaya.github.io/ml_for_physics). Given our modern day use of all things electronic, *you can run, you can hide but you cannot escape ML*. From smart phones to smart toothpastes, ML is everywhere. The aim of these development is to help physicists to wrap their head around all things ML.
+These particular notes are built upon the **A mini course in Machine Learning for Physicists** notes available here:  [A mini course in Machine Learning for Physicists](https://chattopadhyaya.github.io/ml_for_physics), which will keep getting updated over time. The main target of this particular jupyter book is for the [Machine Learning Training workshop](https://indico.cern.ch/event/1706524/overview) organised by [HEP software foundation](https://hepsoftwarefoundation.org) and [IRIS-HEP](https://iris-hep.org).
+
+
+ Given our modern day use of all things electronic, *you can run, you can hide but you cannot escape ML*. From smart phones to smart toothpastes, ML is everywhere. The aim of these development is to help physicists to wrap their head around all things ML.
 
 
 In this course, "*we're here for a good time, not a long time*" so let's first learn what this course in **NOT** for
