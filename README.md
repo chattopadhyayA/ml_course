@@ -1,8 +1,9 @@
 # Machine Learning primer: A mini course
 
-An interactive, beginner friendly introduction to machine learning, written and developed by **Arghya Chattopadhyay** for the [HEP software foundation](https://hepsoftwarefoundation.org) and [IRIS-HEP](https://iris-hep.org) training programme in Machine Learning.
+An interactive, beginner friendly course for machine learning, written and developed by [**Arghya Chattopadhyay**](https://chattopadhyaya.github.io).
 
 📘 **Read the Jupyter Book:**  
+
 https://chattopadhyaya.github.io/ml_course
 
 This course is designed to help physicists build an intuitive and practical understanding of machine learning. It introduces the basic ideas with examples, explains the mathematics behind the concepts that operate under the hood, develops common ML terminology, and provides hands-on experience with Python based tools and models.
@@ -25,6 +26,28 @@ The course includes:
 - exercises and suggestions for further study.
 
 Many chapters include executable notebooks, interactive figures, questions with hidden answers, and links for opening the notebooks in Google Colab.
+
+
+## How to use this book: a guide for fellow travellers
+
+Like any journey through Middle earth, this course is best explored one step at a time.
+
+- Each chapter contains an [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://youtu.be/NPBCbTZWnq0?si=gqvhQB1CMYyacW7z) button. Clicking it will open the corresponding Jupyter Notebook in **Google Colab**, where you can modify the code, run the cells, and experiment freely. Remember: even the longest journey begins by running the first cell.
+
+- The notebooks contain questions whose answers are initially hidden but can be revealed with a single click. This mini course follows an **honour system**: please do not consult the hidden answers (the course’s own little *palantíri*) before you are asked to do so.
+
+- All pages allow you to **run basic Python directly inside the webpage**. Look for the <img src="content/images/pyodide_power_button.png" alt="Turn on interactive Python" style="height:50px; vertical-align:middle; margin-left:1px;"> button near the top of the page. Click it to start the interactive Python environment. The first startup may take a few moments while the browser prepares the kernel and loads the required packages.
+
+- Once the interactive environment is ready, runnable code cells will display controls such as <img src="content/images/pyodide_cell_controls.png" alt="Run and collapse code cell controls" style="height:40px; vertical-align:bottom; margin-left:1px;">. The **play button** runs the selected code cell directly in your browser, while the button beside it can be used to collapse or hide the code area.
+
+- For interactive figures, sliders, and widgets, first activate the environment using the power button and then run the corresponding code cell. Some cells depend on results produced by earlier cells, so it is usually best to follow the path in order rather than wandering ahead alone.
+
+- The in-browser **Pyodide** environment is a useful travelling companion, but it is not designed to carry the heavier burden of training the machine learning models used later in the course. For pages involving model training (using PyTorch), please use the corresponding notebook in **Google Colab** or run it on your **local machine**, the setup instruction is alreasy there in the course page.
+
+- If a code cell does not run in Google Colab, read the warning or error message carefully. A required package may be missing. Install it in a new cell using `!pip install <missing-package-name>`, and then run the notebook again.
+
+> Go carefully, experiment boldly, and remember that no fellowship learns machine learning by merely watching the code pass by.
+
 
 ## Who is this for?
 
