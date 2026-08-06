@@ -36,9 +36,9 @@ Like any journey through Middle earth, this course is best explored one step at 
 
 - The notebooks contain questions whose answers are initially hidden but can be revealed with a single click. This mini course follows an **honour system**: please do not consult the hidden answers (the course’s own little *palantíri*) before you are asked to do so.
 
-- All pages allow you to **run basic Python directly inside the webpage**. Look for the <img src="content/images/pyodide_power_button.png" alt="Turn on interactive Python" style="height:50px; vertical-align:middle; margin-left:1px;"> button near the top of the page. Click it to start the interactive Python environment. The first startup may take a few moments while the browser prepares the kernel and loads the required packages.
+- All pages allow you to **run basic Python directly inside the webpage**. Look for the <img src="content/images/pyodide_power_button.png" alt="Turn on interactive Python" style="height:20px; vertical-align:middle; margin-left:1px;"> button near the top of the page. Click it to start the interactive Python environment. The first startup may take a few moments while the browser prepares the kernel and loads the required packages.
 
-- Once the interactive environment is ready, runnable code cells will display controls such as <img src="content/images/pyodide_cell_controls.png" alt="Run and collapse code cell controls" style="height:40px; vertical-align:bottom; margin-left:1px;">. The **play button** runs the selected code cell directly in your browser, while the button beside it can be used to collapse or hide the code area.
+- Once the interactive environment is ready, runnable code cells will display controls such as <img src="content/images/pyodide_cell_controls.png" alt="Run and collapse code cell controls" style="height:20px; vertical-align:bottom; margin-left:1px;">. The **play button** runs the selected code cell directly in your browser, while the button beside it can be used to collapse or hide the code area.
 
 - For interactive figures, sliders, and widgets, first activate the environment using the power button and then run the corresponding code cell. Some cells depend on results produced by earlier cells, so it is usually best to follow the path in order rather than wandering ahead alone.
 
