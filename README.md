@@ -98,7 +98,7 @@ If this tutorial, its code, or its explanations help your project, thesis, artic
 
 ```text
 Arghya Chattopadhyay,
-"A mini course in Machine Learning for HSF training",
+"Machine Learning primer: A mini course",
 GitHub repository:
 https://github.com/chattopadhyayA/ml_course
 
