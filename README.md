@@ -1,4 +1,4 @@
-# A mini course in Machine Learning for HSF training
+# Machine Learning primer: A mini course
 
 An interactive, beginner friendly introduction to machine learning, written and developed by **Arghya Chattopadhyay** for the [HEP software foundation](https://hepsoftwarefoundation.org) and [IRIS-HEP](https://iris-hep.org) training programme in Machine Learning.
 
