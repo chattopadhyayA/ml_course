@@ -1,18 +1,24 @@
-# Solutions
+# Cheikh Tidiane Diouf
 
-## What should you submit?
+I am a graduate researcher in Physics at Cheikh Anta Diop University (UCAD), Senegal. My academic background is in Atomic and Nuclear Physics, and I have a strong interest in applying computational methods and machine learning to scientific research.
 
-Once the course is over, you will have **two weeks** to complete the exercises and, if you would like to contribute your work back to the course, submit it through GitHub in this folder.
+My current research interests are:
+- Machine Learning and Artificial Intelligence
+- High Energy Particle Physics
+- Data Analysis for Large Hadron Collider (LHC) experiments
+- Scientific Computing and Statistical Methods
 
-This folder is empty for now. Inside it, create **one folder with your name**. For example:
+I attended the HSF Machine Learning mini course in 2026.
 
-```text
-Solutions/
-└── Your_Name/
-    ├── README.md (optional)
-    ├── supervised_penguins_student.ipynb
-    ├── deep_learning_student.ipynb
-    └── unsupervised_wine_student.ipynb
-```
+## 3 things I am good at
+- Python programming and data analysis
+- Learning new computational techniques
+- Solving quantitative and analytical problems
 
-Place your completed exercise notebooks inside your own folder.
+## 3 things I am bad at
+- Front-end web development
+- Designing graphical user interfaces
+- Public speaking (but I am actively improving)
+
+## I am looking forward to
+Learning from the HSF community, collaborating with researchers from around the world, and applying machine learning techniques to challenging problems in high-energy physics.
