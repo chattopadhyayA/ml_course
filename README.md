@@ -98,7 +98,7 @@ If this tutorial, its code, or its explanations help your project, thesis, artic
 
 ```text
 Arghya Chattopadhyay,
-"A mini course in Machine Learning for HSF training",
+"Machine Learning primer: A mini course",
 GitHub repository:
 https://github.com/chattopadhyayA/ml_course
 
@@ -108,7 +108,7 @@ https://chattopadhyaya.github.io/ml_course
 
 A simple acknowledgement such as the following is also welcome:
 
-> This work made use of the tutorial *A mini course in Machine Learning for HSF training* by Arghya Chattopadhyay.
+> This work made use of the tutorial *Machine Learning primer: A mini course* by Arghya Chattopadhyay.
 
 
 ## Feedback and contributions
